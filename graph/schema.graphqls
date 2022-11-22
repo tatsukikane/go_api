@@ -26,3 +26,9 @@ input NewTodo {
 type Mutation {
   createTodo(input: NewTodo!): Todo!
 }
+
+type LikeEpisode {
+  id: ID!
+  episodeId: EpisodeId!
+  created_at: CreatedAt!
+}
