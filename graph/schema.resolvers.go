@@ -17,7 +17,6 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	todo := &model.Todo{
 		Text:   input.Text,
 		ID:     fmt.Sprintf("T%d", rand.Int()),
-		User:   &model.User{ID: input.UserID, Name: "user " + input.UserID},
 		UserID: input.UserID,
 	}
 	r.todos = append(r.todos, todo)
@@ -31,7 +30,8 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 
 // User is the resolver for the user field.
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+
 }
 
 // Mutation returns generated.MutationResolver implementation.
