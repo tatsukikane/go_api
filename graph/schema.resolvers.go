@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"log"
 
 	"github.com/tatsukikane/gqlgen-todos/graph/generated"
 	"github.com/tatsukikane/gqlgen-todos/graph/model"
@@ -28,7 +29,7 @@ func (r *likeEpisodeResolver) CreatedAt(ctx context.Context, obj *model.LikeEpis
 	panic(fmt.Errorf("not implemented: CreatedAt - created_at"))
 }
 
-// TODO: CreateTodo is the resolver for the createTodo field.
+// CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	todo := &model.Todo{
 		Text:   input.Text,
@@ -47,6 +48,7 @@ func (r *mutationResolver) AddLikeEpisode(ctx context.Context, input model.NewLi
 		UserID:    input.UserID,
 		EpisodeID: input.EpisodeID,
 	}
+	log.Printf("%T", input.EpisodeID)
 	r.likeEpisides = append(r.likeEpisides, likeEpisode)
 	return likeEpisode, nil
 }
