@@ -51,14 +51,14 @@ func (r *mutationResolver) AddLikeEpisode(ctx context.Context, input model.NewLi
 	return likeEpisode, nil
 }
 
-// TODO: Todos is the resolver for the todos field.
+// Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
 }
 
 // LikeEpisodes is the resolver for the likeEpisodes field.
 func (r *queryResolver) LikeEpisodes(ctx context.Context) ([]*model.LikeEpisode, error) {
-	panic(fmt.Errorf("not implemented: LikeEpisodes - likeEpisodes"))
+	return r.likeEpisides, nil
 }
 
 // User is the resolver for the user field.
