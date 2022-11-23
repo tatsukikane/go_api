@@ -9,4 +9,6 @@ import "github.com/tatsukikane/gqlgen-todos/graph/model"
 
 type Resolver struct{
 	todos []*model.Todo
+	//likeepsodeのデータの置き場所を記述
+	likeEpisides []*model.LikeEpisode
 }

@@ -14,8 +14,16 @@ type User {
   name: String!
 }
 
+type LikeEpisode {
+  id: ID!
+  episode_id: String!
+  user_id: String!
+  created_at: Int!
+}
+
 type Query {
   todos: [Todo!]!
+  likeEpisodes: [LikeEpisode!]!
 }
 
 input NewTodo {
@@ -23,12 +31,13 @@ input NewTodo {
   userId: String!
 }
 
-type Mutation {
-  createTodo(input: NewTodo!): Todo!
+input NewLikeEpisode {
+  userId:     Int!
+  episode_id: Int!
 }
 
-type LikeEpisode {
-  id: ID!
-  episodeId: EpisodeId!
-  created_at: CreatedAt!
+type Mutation {
+  createTodo(input: NewTodo!): Todo!
+  addLikeEpisode(input: NewLikeEpisode!): LikeEpisode!
 }
+
