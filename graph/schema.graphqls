@@ -16,8 +16,8 @@ type User {
 
 type LikeEpisode {
   id: ID!
-  episode_id: String!
-  user_id: String!
+  episode_id: Int!
+  user_id: Int!
   created_at: String!
 }
 
@@ -32,7 +32,7 @@ input NewTodo {
 }
 
 input NewLikeEpisode {
-  userId:     Int!
+  user_id:     Int!
   episode_id: Int!
 }
 

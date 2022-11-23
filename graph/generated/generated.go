@@ -36,7 +36,6 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	LikeEpisode() LikeEpisodeResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 	Todo() TodoResolver
@@ -76,10 +75,6 @@ type ComplexityRoot struct {
 	}
 }
 
-type LikeEpisodeResolver interface {
-	EpisodeID(ctx context.Context, obj *model.LikeEpisode) (string, error)
-	UserID(ctx context.Context, obj *model.LikeEpisode) (string, error)
-}
 type MutationResolver interface {
 	CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error)
 	AddLikeEpisode(ctx context.Context, input model.NewLikeEpisode) (*model.LikeEpisode, error)
@@ -303,8 +298,8 @@ type User {
 
 type LikeEpisode {
   id: ID!
-  episode_id: String!
-  user_id: String!
+  episode_id: Int!
+  user_id: Int!
   created_at: String!
 }
 
@@ -319,7 +314,7 @@ input NewTodo {
 }
 
 input NewLikeEpisode {
-  userId:     Int!
+  user_id:     Int!
   episode_id: Int!
 }
 
@@ -477,7 +472,7 @@ func (ec *executionContext) _LikeEpisode_episode_id(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.LikeEpisode().EpisodeID(rctx, obj)
+		return obj.EpisodeID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -489,19 +484,19 @@ func (ec *executionContext) _LikeEpisode_episode_id(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_LikeEpisode_episode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "LikeEpisode",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -521,7 +516,7 @@ func (ec *executionContext) _LikeEpisode_user_id(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.LikeEpisode().UserID(rctx, obj)
+		return obj.UserID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -533,19 +528,19 @@ func (ec *executionContext) _LikeEpisode_user_id(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_LikeEpisode_user_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "LikeEpisode",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3012,17 +3007,17 @@ func (ec *executionContext) unmarshalInputNewLikeEpisode(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"userId", "episode_id"}
+	fieldsInOrder := [...]string{"user_id", "episode_id"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "userId":
+		case "user_id":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user_id"))
 			it.UserID, err = ec.unmarshalNInt2int64(ctx, v)
 			if err != nil {
 				return it, err
@@ -3100,54 +3095,28 @@ func (ec *executionContext) _LikeEpisode(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = ec._LikeEpisode_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "episode_id":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._LikeEpisode_episode_id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._LikeEpisode_episode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "user_id":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._LikeEpisode_user_id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._LikeEpisode_user_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "created_at":
 
 			out.Values[i] = ec._LikeEpisode_created_at(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
