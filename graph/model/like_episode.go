@@ -1,11 +1,12 @@
 package model
 
-import "time"
+// import "time"
 
 //LikeEpisodeの型
 type LikeEpisode struct {
 	ID           int64       `json:"id"`
-	CreatedAt    time.Time   `json:"created_at"`
+	// CreatedAt    time.Time   `json:"created_at"`
+	CreatedAt    string   `json:"created_at"`
 	UserID       int64       `json:"user_id"`
 	EpisodeID    int64       `json:"episode_id"`
 }

@@ -6,9 +6,9 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	"math/rand"
 	"time"
-	"log"
 
 	"github.com/tatsukikane/gqlgen-todos/graph/generated"
 	"github.com/tatsukikane/gqlgen-todos/graph/model"
@@ -22,11 +22,6 @@ func (r *likeEpisodeResolver) EpisodeID(ctx context.Context, obj *model.LikeEpis
 // UserID is the resolver for the user_id field.
 func (r *likeEpisodeResolver) UserID(ctx context.Context, obj *model.LikeEpisode) (string, error) {
 	panic(fmt.Errorf("not implemented: UserID - user_id"))
-}
-
-// CreatedAt is the resolver for the created_at field.
-func (r *likeEpisodeResolver) CreatedAt(ctx context.Context, obj *model.LikeEpisode) (int, error) {
-	panic(fmt.Errorf("not implemented: CreatedAt - created_at"))
 }
 
 // CreateTodo is the resolver for the createTodo field.
@@ -44,11 +39,15 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 func (r *mutationResolver) AddLikeEpisode(ctx context.Context, input model.NewLikeEpisode) (*model.LikeEpisode, error) {
 	likeEpisode := &model.LikeEpisode{
 		ID:        int64(rand.Int()),
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+		// CreatedAt: time.Now(),
 		UserID:    input.UserID,
 		EpisodeID: input.EpisodeID,
 	}
-	log.Printf("%T", input.EpisodeID)
+
+	log.Println(likeEpisode)
+	log.Printf("%T型", time.Now())
+
 	r.likeEpisides = append(r.likeEpisides, likeEpisode)
 	return likeEpisode, nil
 }
@@ -91,6 +90,9 @@ type todoResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *likeEpisodeResolver) CreatedAt(ctx context.Context, obj *model.LikeEpisode) (int, error) {
+	panic(fmt.Errorf("not implemented: CreatedAt - created_at"))
+}
 func (r *queryResolver) LikeEpisode(ctx context.Context) ([]*model.LikeEpisode, error) {
 	return r.likeEpisides, nil
 }
